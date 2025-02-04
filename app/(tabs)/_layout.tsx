@@ -9,10 +9,10 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: { height: 70, alignItems: "center", justifyContent: "center" },
         tabBarLabelStyle: { fontSize: 12, fontFamily: "Roboto", fontWeight: "regular" },
-        tabBarActiveTintColor: "#EB3030", 
-        tabBarInactiveTintColor: "#000000", 
+        tabBarActiveTintColor: "#EB3030",
+        tabBarInactiveTintColor: "#000000",
         tabBarIcon: ({ focused, size = 24 }) => {
-          let iconName = "home"; 
+          let iconName = "home";
           switch (route.name) {
             case "home":
               iconName = "home";
@@ -32,6 +32,28 @@ export default function TabLayout() {
             default:
               break;
           }
+
+          // Tạo icon cho tab "shop" có viền tròn xung quanh
+          if (route.name === "shop") {
+            return (
+              <View
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 30,
+                  backgroundColor: focused ? "#EB3030" : "#FFFFFF", // Chuyển màu nền khi chọn
+                  justifyContent: "center",
+                  alignItems: "center",
+                  top: 2,
+                  elevation: focused ? 0 : 0.8,
+                }}
+              >
+                <Feather name={iconName} size={size} color={focused ? "#FFFFFF" : "#000000"} />
+              </View>
+            );
+          }
+
+          // Các tab khác với màu sắc bình thường
           const iconColor = focused ? "#EB3030" : "#000000";
           return <Feather name={iconName} size={size} color={iconColor} />;
         },

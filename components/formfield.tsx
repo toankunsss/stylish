@@ -22,7 +22,7 @@ const FormField = ({ title, placeholder, handldeChangeText, otherStyles, ...prop
         {placeholder === 'Password' && (
           <Icon name="lock" size={20} style={styles.leftIcon} />
         )}
-        {placeholder === 'ConfirmPassword' && (
+        {placeholder === 'Confirm Password' && (
           <Icon name="lock" size={20} style={styles.leftIcon} />
         )}
 
@@ -31,12 +31,13 @@ const FormField = ({ title, placeholder, handldeChangeText, otherStyles, ...prop
           placeholder={placeholder}
           style={[styles.textInput]} // Áp dụng style cho TextInput
           onChangeText={setValue} // Hàm thay đổi giá trị riêng biệt
+          onChange={handldeChangeText} // Hàm thay đổi giá trị chung
           {...props}
-          secureTextEntry={!showPasswords} // Cả hai ô phụ thuộc vào trạng thái này
-        />
+          secureTextEntry={placeholder === 'Password' || placeholder === 'Confirm Password' ? !showPasswords : false}/>
+      
 
         {/* Icon mắt nằm bên phải */}
-        {(placeholder === 'Password' || placeholder === 'ConfirmPassword') && (
+        {(placeholder === 'Password' || placeholder === 'Confirm Password') && (
           <TouchableOpacity
             onPress={() => setShowPasswords(!showPasswords)}
             style={styles.rightIcon}>

@@ -1,79 +1,99 @@
-import { StyleSheet, Text, View, ScrollView, Button } from 'react-native'
-import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import FormField from '../../components/formfield'
-import { Link, useRouter } from 'expo-router'; // Để sử dụng điều hướng
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import FormField from '../../components/formfield';
+import { useRouter } from 'expo-router'; // Để sử dụng điều hướng
 import CustomButton from '../../components/customButton';
 import Footer from '../../components/footer';
-
-const signup = () => {
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase/firebaseConfig';
+const Signup = () => {
   const [form, setForm] = useState({
     email: '',
     password: '',
-    username:'',
-  })
+    confirm: '',
+  });
+
   const router = useRouter();
+
+  const handleSignup = () => {
+    console.log("Form Data:", form); // In dữ liệu nhập vào
+    createUserWithEmailAndPassword(auth, form.email, form.password).then((userCredential) => {
+      console.log("User:", userCredential.user);
+    }).catch((error) => {
+      console.log("Error:", error);
+    });
+  };
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.fullcontainer}>
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.title}>Create An{'\n'}account</Text>
+          <Text style={styles.title}>Create An{'\n'}Account</Text>
+          
           <FormField
             title=""
-            Value={form.email}
+            value={form.email}
             placeholder="Username or Email"
-            handldeChangeText={(value) => setForm({ ...form, email: value })}
+            handldeChangeText={(value) => setForm({ ...form, email: value.nativeEvent.text })}
             otherStyles={styles.input}
-            ketType="email-address"
+            keyboardType="email-address"
           />
+
           <FormField
             title=""
-            Value={form.password}
+            value={form.password}
             placeholder="Password"
-            handldeChangeText={(value) => setForm({ ...form, password: value })}
+            handldeChangeText={(value) => setForm({ ...form, password: value.nativeEvent.text })}
             otherStyles={styles.input}
             secureTextEntry={true}
           />
-                    <FormField
+
+          <FormField
             title=""
-            Value={form.password}
-            placeholder="ConfirmPassword"
-            handldeChangeText={(value) => setForm({ ...form, password: value })}
+            value={form.confirm}
+            placeholder="Confirm Password"
+            handldeChangeText={(value) => setForm({ ...form, confirm: value.nativeEvent.text })}
             otherStyles={styles.input}
             secureTextEntry={true}
           />
-          <Text style={styles.param}>By clicking the <Text style={styles.forgot}>Register </Text>button, you agree{'\n'}to the public offer</Text>
+
+          <Text style={styles.param}>
+            By clicking the <Text style={styles.forgot}>Register </Text>button, you agree{'\n'}to the public offer.
+          </Text>
+
           <CustomButton
             title="Create Account"
-            handledPress={() => router.push('home')}
-            containerStyles={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#F83758',
-              borderRadius: 5,
-              padding: 10,
-              marginVertical: 10,
-              width: 317,
-              height: 55,
-              marginTop: 40,
-            }} 
-            TextStyles={{fontSize: 20, color: '#fff',fontWeight: 'SemiBold'}} 
-            isLoading={undefined}         
+            handleChangeText={handleSignup}
+            containerStyles={styles.buttonContainer}
+            TextStyles={styles.buttonText}
+            isLoading={false}
           />
+
           <Footer 
             title={<Text>I Already Have an Account</Text>} 
-            herfLink={<Link href={'./sign-in'} ><Text style={{color: "red", textDecorationLine: 'underline' }}>Login</Text></Link>}
+            herfLink={
+              <Text 
+                style={styles.loginLink} 
+                onPress={() => router.push('/sign-in')}
+              >
+                Login
+              </Text>
+            }
           />
         </View>
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default signup
+export default Signup;
 
 const styles = StyleSheet.create({
+  fullcontainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -83,7 +103,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flexDirection: 'row',
-    alignItems: 'center', // Căn giữa nội dung theo chiều dọc
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: '#A8A8A9',
     backgroundColor: '#F3F3F3',
@@ -97,19 +117,38 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontSize: 36,
     color: '#000000',
-    alignSelf: 'flex-start', // Giữ tiêu đề ở đầu bên trái
+    alignSelf: 'flex-start',
     marginTop: 30,
   },
-  forgot:{
-    alignSelf: 'flex-end',
-    marginBottom: 10,
+  forgot: {
     color: '#F83758',
     fontSize: 12,
   },
-  param:{
+  param: {
     alignSelf: 'flex-start',
     marginBottom: 10,
     color: '#676767',
     fontSize: 12,
-  }
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F83758',
+    borderRadius: 5,
+    padding: 10,
+    marginVertical: 10,
+    width: 317,
+    height: 55,
+    marginTop: 40,
+  },
+  buttonText: {
+    fontSize: 20,
+    color: '#fff',
+    fontWeight: '600',
+  },
+  loginLink: {
+    color: "red",
+    textDecorationLine: 'underline',
+  },
 });

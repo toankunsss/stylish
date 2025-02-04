@@ -24,7 +24,7 @@ const Signin = () => {
   // }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.fullcotainer}>
       <ScrollView>
         <View style={styles.container}>
           <Text style={styles.title}>Forgot{'\n'}password?</Text>
@@ -55,6 +55,12 @@ const Signin = () => {
 export default Signin;
 
 const styles = StyleSheet.create({
+  fullcotainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     flexDirection: 'column',

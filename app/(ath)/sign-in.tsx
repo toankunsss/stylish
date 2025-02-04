@@ -12,7 +12,7 @@ const signin = () => {
   });
   const router = useRouter();
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.fullcotainer}>
       <ScrollView>
         <View style={styles.container}>
           <Text style={styles.title}>Welcome{'\n'}Back!</Text>
@@ -35,7 +35,7 @@ const signin = () => {
           <TouchableOpacity style={styles.touchForgot} onPress={() => router.push('./forgot')}><Text style={styles.forgot}>Forgot Password?</Text></TouchableOpacity>
           <CustomButton
             title="Login"
-            handledPress="/home"
+            handleChangeText={() => router.push('/home')}
             containerStyles={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -53,7 +53,12 @@ const signin = () => {
           />
           <Footer 
             title={<Text>Create An Account</Text>} 
-            herfLink={<Link href="./signup"><Text style={{ color: "red", textDecorationLine: 'underline' }}>Sign Up</Text></Link>}
+            herfLink={<Text 
+                          style={{ color: "red", textDecorationLine: 'underline' }} 
+                          onPress={() => router.push('/signup')}
+                        >
+                          Sign Up
+                        </Text>}
             />
         </View>
       </ScrollView>
@@ -64,13 +69,19 @@ const signin = () => {
 export default signin
 
 const styles = StyleSheet.create({
+  fullcotainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 32,
+    backgroundColor: '#fff',
   },
+
   input: {
     flexDirection: 'row',
     alignItems: 'center', // Căn giữa nội dung theo chiều dọc

@@ -1,21 +1,17 @@
-import {TouchableOpacity, Text} from 'react-native'
-import React from 'react'
-import { useRouter, Link } from 'expo-router';
+import { TouchableOpacity, Text } from 'react-native';
+import React from 'react';
 
-const customButton = ({title,handledPress,containerStyles,TextStyles,isLoading}) => {
-  const router = useRouter();
+const CustomButton = ({ title, handleChangeText, containerStyles, TextStyles, isLoading }) => {
   return (
-    
     <TouchableOpacity
-        onPress={() => router.push(handledPress)}
-        activeOpacity={0.7}
-        style={containerStyles}
-        disabled={isLoading}
+      onPress={handleChangeText}
+      activeOpacity={0.7}
+      style={containerStyles}
+      disabled={isLoading}
     >
-        <Text style={TextStyles}>{title}</Text>
+      <Text style={TextStyles}>{title}</Text>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
-export default customButton
-
+export default CustomButton;
