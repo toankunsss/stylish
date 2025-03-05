@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import Feather from "react-native-vector-icons/Feather";
 import { View } from "react-native";
+import { useNavigation } from "expo-router";
 
 export default function TabLayout() {
   return (
@@ -59,8 +60,8 @@ export default function TabLayout() {
         },
       })}
     >
-      <Tabs.Screen name="home" options={{ title: "Home" }} />
-      <Tabs.Screen name="Wishlist" options={{ title: "Wishlist" }} />
+      <Tabs.Screen name="home" options={{title:'Home'}} />
+      <Tabs.Screen name="Wishlist" options={{ title:"Wishlist"}} />
       <Tabs.Screen name="shop" options={{ title: "" }} />
       <Tabs.Screen name="search" options={{ title: "Search" }} />
       <Tabs.Screen name="setting" options={{ title: "Settings" }} />

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FormField from '../../components/formfield';
 import { useRouter } from 'expo-router'; // Để sử dụng điều hướng
@@ -7,24 +7,60 @@ import CustomButton from '../../components/customButton';
 import Footer from '../../components/footer';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase/firebaseConfig';
+import { user } from '../../data/user';
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig"; // Import Firestore
+
 const Signup = () => {
   const [form, setForm] = useState({
     email: '',
     password: '',
     confirm: '',
   });
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [error, setError] = useState('');
+  useEffect(() => {
+    if(form.password && form.confirm && form.email) {
+      setIsDisabled(false);
+    }else{
+      setIsDisabled(true);
+    };
+  }, [form.password, form.confirm, form.email]);
+  useEffect(() => {
+    if (form.password && form.confirm) {
+      setError(form.password !== form.confirm ? 'Xác nhận mật khẩu không trùng khớp!' : '');
+      setIsDisabled(form.password !== form.confirm);
+    }
+  }, [form.password, form.confirm]);
+
+  
+  
+  const renderButtonRegister = () => {};
 
   const router = useRouter();
-
-  const handleSignup = () => {
-    console.log("Form Data:", form); // In dữ liệu nhập vào
-    createUserWithEmailAndPassword(auth, form.email, form.password).then((userCredential) => {
-      console.log("User:", userCredential.user);
-    }).catch((error) => {
-      console.log("Error:", error);
-    });
+  const handleSignup = async () => {
+    console.log("Form Data:", form);
+  
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      const user = userCredential.user;
+  
+      console.log("User:", user);
+  
+      // Tạo document trong collection "users"
+      await setDoc(doc(db, "users", user.uid), {
+        email: form.email,
+        createdAt: new Date().toISOString(),
+        uid: user.uid,
+      });
+  
+      console.log("User added to Firestore");
+    } catch (error) {
+      console.error("Error:", error);
+      setError(error.message);
+    }
   };
-
+  
   return (
     <SafeAreaView style={styles.fullcontainer}>
       <ScrollView>
@@ -57,7 +93,7 @@ const Signup = () => {
             otherStyles={styles.input}
             secureTextEntry={true}
           />
-
+          {error && <Text style={{color: 'red'}}>{error}</Text>}
           <Text style={styles.param}>
             By clicking the <Text style={styles.forgot}>Register </Text>button, you agree{'\n'}to the public offer.
           </Text>
@@ -67,12 +103,12 @@ const Signup = () => {
             handleChangeText={handleSignup}
             containerStyles={styles.buttonContainer}
             TextStyles={styles.buttonText}
-            isLoading={false}
+            isLoading={isDisabled}
           />
 
           <Footer 
             title={<Text>I Already Have an Account</Text>} 
-            herfLink={
+            hrefLink={
               <Text 
                 style={styles.loginLink} 
                 onPress={() => router.push('/sign-in')}

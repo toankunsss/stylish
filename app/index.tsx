@@ -2,7 +2,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import Splash from '../components/splash'
 import Signin from '../app/(ath)/sign-in'
-import Home from '../app/(tabs)/home'
 import OnboardingScreen from '../app/Onboarding/Onboardingscreen'
 const index = () => {
   const [loading, setLoading] = React.useState(false)

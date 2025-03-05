@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import FormField from '../../components/formfield';
 import { useRouter } from 'expo-router'; // Corrected import for router
 import CustomButton from '../../components/customButton';
-import Footer from '../../components/footer';
 import { useFonts } from 'expo-font';
 
 const Signin = () => {
@@ -41,7 +40,7 @@ const Signin = () => {
           </Text>
           <CustomButton
             title="Submit"
-            handledPress={() => router.push('/home')}
+            handleChangeText={() => router.push('/home')}
             containerStyles={styles.customButton}
             TextStyles={styles.buttonText}
             isLoading={undefined}

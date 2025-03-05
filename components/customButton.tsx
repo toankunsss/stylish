@@ -6,8 +6,9 @@ const CustomButton = ({ title, handleChangeText, containerStyles, TextStyles, is
     <TouchableOpacity
       onPress={handleChangeText}
       activeOpacity={0.7}
-      style={containerStyles}
+      style={[containerStyles, { opacity: isLoading ? 0.5 : 1 }]}
       disabled={isLoading}
+      
     >
       <Text style={TextStyles}>{title}</Text>
     </TouchableOpacity>
